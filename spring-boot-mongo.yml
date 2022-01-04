@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name : spring-boot
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: springdp
+  strategy:
+    type: RollingUpdate 
+    rollingUpdate:
+      maxSurge : 1
+      maxUnavailable: 1
+  minReadySeconds: 20
+  template:
+    metadata: 
+      name: spring-pod
+      labels:
+        name: springdp
+    spec: 
+      containers: 
+      - name : spring-con
+        image: potturi319/spring-boot-mongo:Build
+        ports:
+        - containerPort: 8080
+        env:
+        - name: MONGO_DB_HOSTNAME   # not good practice passwords expose in file. demo purpose only
+          value: mongo
+        - name: MONGO_DB_USERNAME
+          value: potturi1234
+        - name: MONGO_DB_PASSWORD
+          value: sumanth1234
+---
+apiVersion: v1 
+kind: Service 
+metadata:
+  name : spring-svc
+  labels:
+    name: springdp
+spec:
+  type: NodePort
+  ports:
+  - port: 8586
+    targetPort: 8080
+    nodePort: 31123
+  selector:
+    name: springdp
+---
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata: 
+  name: mongo
+spec:
+  selector:
+    matchLabels:
+      name: mongo
+  template:
+    metadata:
+      name: mongo-pod
+      labels:
+        name: mongo
+    spec:
+      containers:
+      - name: mongo-con
+        ports:
+        - containerPort: 27017
+        image: mongo
+        env:
+        - name:  MONGO_INITDB_ROOT_USERNAME
+          value: potturi1234
+        - name: MONGO_INITDB_ROOT_PASSWORD
+          value: sumanth1234
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongo
+spec:
+  type: ClusterIP
+  ports: 
+  - port: 27017
+    targetPort: 27017
+  selector:
+    name: mongo
