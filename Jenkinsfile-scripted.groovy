@@ -1,7 +1,7 @@
 node{
      
     stage('SCM Checkout'){
-        git credentialsId: 'GIT_CREDENTIALS', url:  'https://github.com/potturi319/spring-mongoDb-K8s-jenkins.git', branch: 'master'
+        git credentialsId: 'GIT_CREDENTIALS', url:  'https://github.com/potturisumanth/spring-boot-jenkins-k8s.git', branch: 'master'
     }
     
     stage(" Maven Clean Package"){
