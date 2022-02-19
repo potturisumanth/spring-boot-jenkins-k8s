@@ -22,7 +22,7 @@ options{
    stage('CheckoutCode')
    {
      steps{
-	 git branch: 'master', credentialsId: '8e348aa2-9531-4dbe-863d-1adb64897470', url: 'https://github.com/potturi319/spring-mongoDb-K8s-jenkins.git'
+	 git branch: 'master', credentialsId: '8e348aa2-9531-4dbe-863d-1adb64897470', url: 'https://github.com/potturisumanth/spring-boot-jenkins-k8s.git'
 	 }
    }
    
